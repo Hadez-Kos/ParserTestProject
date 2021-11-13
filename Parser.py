@@ -1,12 +1,13 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
-import selenium.webdriver.common.devtools.v93 as devtools
 
 options = webdriver.ChromeOptions()
 
 options.add_experimental_option('prefs', {
     'geolocation': True
 })
+
+options.headless = True
 
 try:
     driver = webdriver.Chrome(
@@ -23,22 +24,20 @@ try:
     driver.execute_cdp_cmd("Emulation.setGeolocationOverride", {"latitude": 59.9386,
                                                                 "longitude": 30.3141,
                                                                 "accuracy": 50})
-
+    #
     page = 1
     while True:
         url_page = url + f"page/{page}/"
         driver.get(url=url_page)
-
         soup = BeautifulSoup(driver.page_source, 'lxml')
         try:
-            html_tag_product = soup.find('div', class_='cc').find('div', class_='cj').find('div', class_='oX')
-            city = soup.find('span', class_='yV').text
-            for i in html_tag_product.find_all('div', attrs={
-                'class': ['wR w_2 oY wW', 'wR w_2 oY wW w_0', 'wR wZ oY wU', 'wR w_2 oY']}):
-                url_product = i.find('a', attrs={'class': ['Ni NK', 'Ni NK Nj']}).get('href')
+            html_tag_product = soup.find('div', class_='cc').find('div', class_='cj').find('div', class_=['oQ'])
+            city = soup.find('span', attrs={'class': ['yV', 'It']}).text
+            for i in html_tag_product.find_all('div', attrs={'class': ['xV x_6 oR x_', 'xV x_6 oR x_ x_4', 'xV x_5 oR x_', 'xV x_5 oR x_ x_4']}):
+                url_product = i.find('a', attrs={'class': ['NA N_1', 'NA N_0']}).get('href')
                 Id_product = int(url_product.split('/id', 1)[1].replace('/', ''))
-                title_product = i.find('p', class_='Nl').text
-                print(url_product, Id_product, title_product, city, page)
+                title_product = i.find('p', attrs={'class': ['ND']}).text
+                print(url_product, Id_product, title_product, city)
 
             page += 1
         except:
