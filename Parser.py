@@ -11,7 +11,7 @@ def get_info_product(url, city, coord):
     options.headless = True
 
     try:
-        driver = webdriver.Chrome(executable_path='../yandexdriver.exe', options=options)
+        driver = webdriver.Chrome(executable_path='yandexdriver.exe', options=options)
 
         driver.execute_cdp_cmd('Network.setUserAgentOverride', {
             'userAgent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.85 YaBrowser/21.11.0.1996 Yowser/2.5 Safari/537.36',
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     url_address = 'https://www.detmir.ru/catalog/index/name/zdorovyj_perekus_pp/'
     coord_city = {'Москва': {"latitude": 59.9386, "longitude": 30.3141, "accuracy": 50},
                   'Санкт-Петербург': {"latitude": 55.7522, "longitude": 37.6156, "accuracy": 50}}
-    column = ['ID товара', 'Наименование', 'Цена', 'Город', 'Промо цена', 'Ссылка на страницу']
+    column = ['id', 'title', 'price', 'city', 'promo_price', 'url']
     data_parse_site = []
     for city in coord_city.keys():
         data_parse_site += get_info_product(url=url_address, city=city, coord=coord_city[city])
